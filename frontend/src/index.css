@@ -393,3 +393,19 @@ input, select {
   margin: 32px 0 16px;
   font-size: 1.3rem;
 }
+
+.feed-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.feed-header h2 {
+  margin-bottom: 0;
+}
+
+.sport-filter {
+  width: auto;
+  max-width: 180px;
+}

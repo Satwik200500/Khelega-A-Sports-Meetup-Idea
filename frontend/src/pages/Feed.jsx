@@ -6,6 +6,7 @@ function Feed() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [actionError, setActionError] = useState("");
+  const [sportFilter, setSportFilter] = useState("All");
 
   const currentUser = JSON.parse(localStorage.getItem("user"));
 
@@ -47,18 +48,39 @@ function Feed() {
   if (loading) return <p className="feed-status">Loading posts...</p>;
   if (error) return <p className="feed-status form-error">{error}</p>;
 
+  const sports = ["All", "Football", "Cricket", "Badminton", "Basketball", "Volleyball", "Tennis", "Other"];
+
+  const visiblePosts =
+    sportFilter === "All" ? posts : posts.filter((post) => post.sport === sportFilter);
+
   return (
     <div className="feed-page">
-      <h2>Games Near You</h2>
+      <div className="feed-header">
+        <h2>Games Near You</h2>
+
+        <select
+          className="sport-filter"
+          value={sportFilter}
+          onChange={(e) => setSportFilter(e.target.value)}
+        >
+          {sports.map((sport) => (
+            <option key={sport} value={sport}>{sport}</option>
+          ))}
+        </select>
+      </div>
 
       {actionError && <p className="form-error">{actionError}</p>}
 
-      {posts.length === 0 && (
-        <p className="feed-status">No posts yet. Be the first to create one!</p>
+      {visiblePosts.length === 0 && (
+        <p className="feed-status">
+          {posts.length === 0
+            ? "No posts yet. Be the first to create one!"
+            : `No ${sportFilter} games right now. Try a different sport.`}
+        </p>
       )}
 
       <div className="post-grid">
-        {posts.map((post) => {
+        {visiblePosts.map((post) => {
           const hasJoined = currentUser && post.playersJoined.includes(currentUser.id);
           const spotsLeft = post.playersNeeded - post.playersJoined.length;
 
