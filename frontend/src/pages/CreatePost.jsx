@@ -31,69 +31,61 @@ function CreatePost() {
   };
 
   return (
-    <div>
-      <h2>Create a Post</h2>
+    <div className="auth-page">
+      <form className="auth-card" onSubmit={handleSubmit}>
+        <h2>Create a Post</h2>
+        <p className="auth-subtitle">Tell players what you need.</p>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Sport</label>
-          <select value={sport} onChange={(e) => setSport(e.target.value)}>
-            <option value="Football">Football</option>
-            <option value="Cricket">Cricket</option>
-            <option value="Badminton">Badminton</option>
-            <option value="Basketball">Basketball</option>
-            <option value="Volleyball">Volleyball</option>
-            <option value="Tennis">Tennis</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
+        <label>Sport</label>
+        <select value={sport} onChange={(e) => setSport(e.target.value)}>
+          <option value="Football">Football</option>
+          <option value="Cricket">Cricket</option>
+          <option value="Badminton">Badminton</option>
+          <option value="Basketball">Basketball</option>
+          <option value="Volleyball">Volleyball</option>
+          <option value="Tennis">Tennis</option>
+          <option value="Other">Other</option>
+        </select>
 
-        <div>
-          <label>Location</label>
+        <label>Location</label>
+        <input
+          type="text"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          placeholder="e.g. Sector 62, Noida"
+          required
+        />
+
+        <label>Date & Time</label>
+        <input
+          type="datetime-local"
+          value={dateTime}
+          onChange={(e) => setDateTime(e.target.value)}
+          required
+        />
+
+        <label>Players Needed</label>
+        <input
+          type="number"
+          min="1"
+          value={playersNeeded}
+          onChange={(e) => setPlayersNeeded(e.target.value)}
+          required
+        />
+
+        <label className="checkbox-label">
           <input
-            type="text"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            required
+            type="checkbox"
+            checked={hasEquipment}
+            onChange={(e) => setHasEquipment(e.target.checked)}
           />
-        </div>
+          I have equipment to bring
+        </label>
 
-        <div>
-          <label>Date & Time</label>
-          <input
-            type="datetime-local"
-            value={dateTime}
-            onChange={(e) => setDateTime(e.target.value)}
-            required
-          />
-        </div>
+        <button className="btn-primary" type="submit">Create Post</button>
 
-        <div>
-          <label>Players Needed</label>
-          <input
-            type="number"
-            min="1"
-            value={playersNeeded}
-            onChange={(e) => setPlayersNeeded(e.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          <label>
-            <input
-              type="checkbox"
-              checked={hasEquipment}
-              onChange={(e) => setHasEquipment(e.target.checked)}
-            />
-            I have equipment
-          </label>
-        </div>
-
-        <button type="submit">Create Post</button>
+        {error && <p className="form-error">{error}</p>}
       </form>
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 }

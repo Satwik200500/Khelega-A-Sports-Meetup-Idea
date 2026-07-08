@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { login } from "../api/auth";
 
 function Login() {
@@ -24,34 +24,35 @@ function Login() {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
+    <div className="auth-page">
+      <form className="auth-card" onSubmit={handleSubmit}>
+        <h2>Welcome back</h2>
+        <p className="auth-subtitle">Log in to find your next game.</p>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
+        <label>Email</label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
 
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+        <label>Password</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
-        <button type="submit">Login</button>
+        <button className="btn-primary" type="submit">Login</button>
+
+        {error && <p className="form-error">{error}</p>}
+
+        <p className="auth-switch">
+          New to Khelega? <Link to="/signup">Sign up</Link>
+        </p>
       </form>
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 }

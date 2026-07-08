@@ -44,40 +44,59 @@ function Feed() {
     }
   };
 
-  if (loading) return <p>Loading posts...</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  if (loading) return <p className="feed-status">Loading posts...</p>;
+  if (error) return <p className="feed-status form-error">{error}</p>;
 
   return (
-    <div>
-      <h2>Available Games</h2>
+    <div className="feed-page">
+      <h2>Games Near You</h2>
 
-      {actionError && <p style={{ color: "red" }}>{actionError}</p>}
-      {posts.length === 0 && <p>No posts yet. Be the first to create one!</p>}
+      {actionError && <p className="form-error">{actionError}</p>}
 
-      {posts.map((post) => {
-        const hasJoined = currentUser && post.playersJoined.includes(currentUser.id);
+      {posts.length === 0 && (
+        <p className="feed-status">No posts yet. Be the first to create one!</p>
+      )}
 
-        return (
-          <div key={post._id} style={{ border: "1px solid gray", padding: "10px", margin: "10px 0" }}>
-            <h3>{post.sport}</h3>
-            <p>Location: {post.location}</p>
-            <p>Time: {new Date(post.dateTime).toLocaleString()}</p>
-            <p>Players needed: {post.playersNeeded}</p>
-            <p>Players joined: {post.playersJoined.length}</p>
-            <p>Equipment provided: {post.hasEquipment ? "Yes" : "No"}</p>
-            <p>Posted by: {post.createdBy?.name}</p>
-            <p>Status: {post.status}</p>
+      <div className="post-grid">
+        {posts.map((post) => {
+          const hasJoined = currentUser && post.playersJoined.includes(currentUser.id);
+          const spotsLeft = post.playersNeeded - post.playersJoined.length;
 
-            {currentUser && hasJoined && (
-              <button onClick={() => handleLeave(post._id)}>Leave</button>
-            )}
+          return (
+            <div className="post-card" key={post._id}>
+              <div className="post-card-header">
+                <span className="post-sport-tag">{post.sport}</span>
+                <span className={`post-status post-status-${post.status}`}>{post.status}</span>
+              </div>
 
-            {currentUser && !hasJoined && post.status === "open" && (
-              <button onClick={() => handleJoin(post._id)}>Join</button>
-            )}
-          </div>
-        );
-      })}
+              <div className="post-card-body">
+                <p className="post-location">📍 {post.location}</p>
+                <p className="post-time">🕒 {new Date(post.dateTime).toLocaleString()}</p>
+                <p className="post-equipment">
+                  {post.hasEquipment ? "🏸 Equipment provided" : "🎒 Bring your own equipment"}
+                </p>
+              </div>
+
+              <div className="post-card-divider"></div>
+
+              <div className="post-card-footer">
+                <div>
+                  <p className="post-spots">{spotsLeft} spot{spotsLeft !== 1 ? "s" : ""} left</p>
+                  <p className="post-creator">by {post.createdBy?.name}</p>
+                </div>
+
+                {currentUser && hasJoined && (
+                  <button className="btn-outline" onClick={() => handleLeave(post._id)}>Leave</button>
+                )}
+
+                {currentUser && !hasJoined && post.status === "open" && (
+                  <button className="btn-accent" onClick={() => handleJoin(post._id)}>Join</button>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

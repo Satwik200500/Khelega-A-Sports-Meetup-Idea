@@ -11,21 +11,23 @@ function Navbar() {
   };
 
   return (
-    <nav style={{ display: "flex", gap: "12px", padding: "10px", borderBottom: "1px solid gray" }}>
-      <Link to="/feed">Feed</Link>
+    <nav className="navbar">
+      <Link to="/feed" className="navbar-logo">Khelega</Link>
 
-      {user ? (
-        <>
-          <Link to="/create-post">Create Post</Link>
-          <span style={{ marginLeft: "auto" }}>Logged in as {user.name}</span>
-          <button onClick={handleLogout}>Logout</button>
-        </>
-      ) : (
-        <>
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Signup</Link>
-        </>
-      )}
+      <div className="navbar-links">
+        {user ? (
+          <>
+            <Link to="/create-post">Create Post</Link>
+            <span className="navbar-user">Hey, {user.name}</span>
+            <button className="btn-outline" onClick={handleLogout}>Logout</button>
+          </>
+        ) : (
+          <>
+            <Link to="/login">Login</Link>
+            <Link to="/signup" className="btn-primary-link">Sign Up</Link>
+          </>
+        )}
+      </div>
     </nav>
   );
 }
