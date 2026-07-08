@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Feed from "./pages/Feed";
@@ -7,9 +8,7 @@ import CreatePost from "./pages/CreatePost";
 function App() {
   return (
     <BrowserRouter>
-      <nav>
-        <Link to="/login">Login</Link> | <Link to="/signup">Signup</Link> | <Link to="/feed">Feed</Link> | <Link to="/create-post">Create Post</Link>
-      </nav>
+      <Navbar />
 
       <Routes>
         <Route path="/login" element={<Login />} />
