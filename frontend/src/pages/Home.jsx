@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import HeroIllustration from "../components/HeroIllustration";
 
 function Home() {
   const isLoggedIn = !!localStorage.getItem("token");
@@ -6,6 +7,7 @@ function Home() {
   return (
     <div className="home-page">
       <div className="home-hero">
+        <HeroIllustration />
         <span className="home-eyebrow">Pickup sports, sorted</span>
         <h1>Short on players? <br />Not anymore.</h1>
         <p className="home-subtitle">
