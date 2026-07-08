@@ -54,6 +54,10 @@ button:hover {
   opacity: 0.85;
 }
 
+button:active {
+  transform: scale(0.97);
+}
+
 button:focus-visible,
 input:focus-visible,
 select:focus-visible {
@@ -550,13 +554,53 @@ input, select {
   box-shadow: 0 8px 20px rgba(22, 36, 28, 0.1);
 }
 
-.home-logo {
-  height: 48px;
-  width: auto;
-  margin-bottom: 24px;
-}
 
 .navbar-logo-img {
   height: 32px;
   width: auto;
 }
+
+.skeleton-card {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  overflow: hidden;
+  height: 220px;
+  position: relative;
+}
+
+.skeleton-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    var(--color-bg) 25%,
+    #EFEDE4 50%,
+    var(--color-bg) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted);
+}
+

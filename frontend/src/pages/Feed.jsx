@@ -47,7 +47,20 @@ function Feed() {
     }
   };
 
-  if (loading) return <p className="feed-status">Loading posts...</p>;
+  if (loading) {
+  return (
+    <div className="feed-page">
+      <h2>Games Near You</h2>
+      <div className="post-grid">
+        {[1, 2, 3, 4, 5, 6].map((n) => (
+          <div className="skeleton-card" key={n}>
+            <div className="skeleton-shimmer"></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
   if (error) return <p className="feed-status form-error">{error}</p>;
 
   const sports = ["All", "Football", "Cricket", "Badminton", "Basketball", "Volleyball", "Tennis", "Other"];
@@ -87,7 +100,7 @@ function Feed() {
           const spotsLeft = post.playersNeeded - post.playersJoined.length;
 
           return (
-            <div className="post-card" key={post._id}>
+            <div className="post-card" key={post._id} >
               <Link to={`/posts/${post._id}`} className="post-card-link">
                 <div className="post-card-header">
                   <span className="post-sport-tag">

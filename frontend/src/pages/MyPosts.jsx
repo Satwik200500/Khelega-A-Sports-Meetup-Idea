@@ -34,7 +34,20 @@ function MyPosts() {
     }
   };
 
-  if (loading) return <p className="feed-status">Loading your posts...</p>;
+  if (loading) {
+  return (
+    <div className="feed-page">
+      <h2>Games Near You</h2>
+      <div className="post-grid">
+        {[1, 2, 3, 4, 5, 6].map((n) => (
+          <div className="skeleton-card" key={n}>
+            <div className="skeleton-shimmer"></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
   if (error) return <p className="feed-status form-error">{error}</p>;
 
   const createdPosts = posts.filter((post) => post.createdBy?._id === currentUser.id);
