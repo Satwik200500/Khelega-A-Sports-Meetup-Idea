@@ -21,3 +21,18 @@ export const createPost = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+export const getAllPosts = async (req, res) => {
+  try {
+    const posts = await Post.find()
+      .populate("createdBy", "name email")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      count: posts.length,
+      posts,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
