@@ -4,7 +4,7 @@ const app = express();
 const PORT = 5000;
 
 app.get("/", (req, res) => {
-  res.send("Hello from Khelega backend! 🏏");
+  res.send("Hello from Khelega backend! 🏏 now with Nodemon");
 });
 
 app.listen(PORT, () => {
