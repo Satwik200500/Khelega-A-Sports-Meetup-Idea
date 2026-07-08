@@ -69,3 +69,33 @@ export const leavePost = async (postId) => {
 
   return data;
 };
+
+export const getPostById = async (postId) => {
+  const response = await fetch(`${BASE_URL}/${postId}`);
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to fetch post");
+  }
+
+  return data;
+};
+
+export const deletePost = async (postId) => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(`${BASE_URL}/${postId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to delete post");
+  }
+
+  return data;
+};

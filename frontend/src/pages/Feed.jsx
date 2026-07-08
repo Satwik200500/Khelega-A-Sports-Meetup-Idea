@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { getAllPosts, joinPost, leavePost } from "../api/posts";
 
 function Feed() {
@@ -86,18 +87,20 @@ function Feed() {
 
           return (
             <div className="post-card" key={post._id}>
-              <div className="post-card-header">
-                <span className="post-sport-tag">{post.sport}</span>
-                <span className={`post-status post-status-${post.status}`}>{post.status}</span>
-              </div>
+              <Link to={`/posts/${post._id}`} className="post-card-link">
+                <div className="post-card-header">
+                  <span className="post-sport-tag">{post.sport}</span>
+                  <span className={`post-status post-status-${post.status}`}>{post.status}</span>
+                </div>
 
-              <div className="post-card-body">
-                <p className="post-location">📍 {post.location}</p>
-                <p className="post-time">🕒 {new Date(post.dateTime).toLocaleString()}</p>
-                <p className="post-equipment">
-                  {post.hasEquipment ? "🏸 Equipment provided" : "🎒 Bring your own equipment"}
-                </p>
-              </div>
+                <div className="post-card-body">
+                  <p className="post-location">📍 {post.location}</p>
+                  <p className="post-time">🕒 {new Date(post.dateTime).toLocaleString()}</p>
+                  <p className="post-equipment">
+                    {post.hasEquipment ? "🏸 Equipment provided" : "🎒 Bring your own equipment"}
+                  </p>
+                </div>
+              </Link>
 
               <div className="post-card-divider"></div>
 

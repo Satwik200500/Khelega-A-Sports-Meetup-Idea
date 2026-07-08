@@ -7,6 +7,7 @@ import Signup from "./pages/Signup";
 import Feed from "./pages/Feed";
 import CreatePost from "./pages/CreatePost";
 import MyPosts from "./pages/MyPosts";
+import PostDetail from "./pages/PostDetail";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/posts/:id" element={<PostDetail />} />
         <Route
           path="/my-posts"
           element={
