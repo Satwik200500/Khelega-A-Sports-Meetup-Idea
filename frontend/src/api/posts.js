@@ -31,3 +31,41 @@ export const createPost = async (postData) => {
 
   return data;
 };
+
+export const joinPost = async (postId) => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(`${BASE_URL}/${postId}/join`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to join post");
+  }
+
+  return data;
+};
+
+export const leavePost = async (postId) => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(`${BASE_URL}/${postId}/leave`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to leave post");
+  }
+
+  return data;
+};
