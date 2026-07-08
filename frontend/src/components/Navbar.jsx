@@ -18,6 +18,7 @@ function Navbar() {
         {user ? (
           <>
             <Link to="/create-post">Create Post</Link>
+            <Link to="/my-posts">My Posts</Link>
             <span className="navbar-user">Hey, {user.name}</span>
             <button className="btn-outline" onClick={handleLogout}>Logout</button>
           </>

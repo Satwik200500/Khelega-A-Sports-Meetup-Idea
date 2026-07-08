@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Feed from "./pages/Feed";
 import CreatePost from "./pages/CreatePost";
+import MyPosts from "./pages/MyPosts";
 
 function App() {
   return (
@@ -15,6 +16,14 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route
+          path="/my-posts"
+          element={
+           <ProtectedRoute>
+              <MyPosts />
+           </ProtectedRoute>
+        }
+     />
         <Route path="/feed" element={<Feed />} />
         <Route
           path="/create-post"

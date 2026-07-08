@@ -388,3 +388,8 @@ input, select {
   color: var(--color-muted);
   font-size: 0.9rem;
 }
+
+.my-posts-subheading {
+  margin: 32px 0 16px;
+  font-size: 1.3rem;
+}
