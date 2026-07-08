@@ -12,7 +12,7 @@ function Navbar() {
 
   return (
     <nav className="navbar">
-      <Link to="/feed" className="navbar-logo">Khelega</Link>
+      <Link to="/" className="navbar-logo">Khelega</Link>
 
       <div className="navbar-links">
         {user ? (

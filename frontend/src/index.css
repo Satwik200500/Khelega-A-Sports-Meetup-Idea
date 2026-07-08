@@ -309,3 +309,82 @@ input, select {
 .checkbox-label input {
   width: auto;
 }
+
+.home-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 60px 32px;
+}
+
+.home-hero {
+  text-align: center;
+  max-width: 650px;
+  margin: 0 auto 80px;
+}
+
+.home-eyebrow {
+  display: inline-block;
+  color: var(--color-turf);
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+}
+
+.home-hero h1 {
+  font-size: 3.5rem;
+  line-height: 1.05;
+  margin-bottom: 20px;
+}
+
+.home-subtitle {
+  color: var(--color-muted);
+  font-size: 1.1rem;
+  margin-bottom: 32px;
+}
+
+.home-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.btn-outline-link {
+  border: 1px solid var(--color-border);
+  color: var(--color-ink);
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.btn-outline-link:hover {
+  border-color: var(--color-turf);
+  color: var(--color-turf);
+}
+
+.home-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 32px;
+}
+
+.home-step-number {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--color-accent);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.home-step h3 {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.home-step p {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
