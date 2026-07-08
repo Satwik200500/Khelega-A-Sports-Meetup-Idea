@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getAllPosts, leavePost } from "../api/posts";
 import { Link } from "react-router-dom";
+import { sportIcons } from "../utils/sportIcons";
 
 function MyPosts() {
   const [posts, setPosts] = useState([]);
@@ -54,21 +55,38 @@ function MyPosts() {
         </p>
       )}
       <div className="post-grid">
-        {createdPosts.map((post) => (
-          <div className="post-card" key={post._id}>
-            <div className="post-card-header">
-              <span className="post-sport-tag">{post.sport}</span>
-              <span className={`post-status post-status-${post.status}`}>{post.status}</span>
+        {createdPosts.map((post) => {
+          const spotsLeft = post.playersNeeded - post.playersJoined.length;
+          return (
+            <div className="post-card" key={post._id}>
+              <Link to={`/posts/${post._id}`} className="post-card-link">
+                <div className="post-card-header">
+                  <span className="post-sport-tag">
+                    <span className="post-sport-icon">{sportIcons[post.sport]}</span>
+                    {post.sport}
+                  </span>
+                  <span className={`post-status post-status-${post.status}`}>{post.status}</span>
+                </div>
+                <div className="post-card-body">
+                  <p className="post-location">📍 {post.location}</p>
+                  <p className="post-time">🕒 {new Date(post.dateTime).toLocaleString()}</p>
+
+                  <div className="post-progress">
+                    <div className="post-progress-bar">
+                      <div
+                        className="post-progress-fill"
+                        style={{ width: `${(post.playersJoined.length / post.playersNeeded) * 100}%` }}
+                      ></div>
+                    </div>
+                    <span className="post-progress-label">
+                      {post.playersJoined.length}/{post.playersNeeded} joined · {spotsLeft} spot{spotsLeft !== 1 ? "s" : ""} left
+                    </span>
+                  </div>
+                </div>
+              </Link>
             </div>
-            <div className="post-card-body">
-              <p className="post-location">📍 {post.location}</p>
-              <p className="post-time">🕒 {new Date(post.dateTime).toLocaleString()}</p>
-              <p className="post-spots">
-                {post.playersJoined.length}/{post.playersNeeded} players joined
-              </p>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <h3 className="my-posts-subheading">Games You Joined</h3>
@@ -80,18 +98,29 @@ function MyPosts() {
       <div className="post-grid">
         {joinedPosts.map((post) => (
           <div className="post-card" key={post._id}>
-            <div className="post-card-header">
-              <span className="post-sport-tag">{post.sport}</span>
-              <span className={`post-status post-status-${post.status}`}>{post.status}</span>
-            </div>
-            <div className="post-card-body">
-              <p className="post-location">📍 {post.location}</p>
-              <p className="post-time">🕒 {new Date(post.dateTime).toLocaleString()}</p>
-              <p className="post-creator">Organized by {post.createdBy?.name}</p>
-            </div>
+            <Link to={`/posts/${post._id}`} className="post-card-link">
+              <div className="post-card-header">
+                <span className="post-sport-tag">
+                  <span className="post-sport-icon">{sportIcons[post.sport]}</span>
+                  {post.sport}
+                </span>
+                <span className={`post-status post-status-${post.status}`}>{post.status}</span>
+              </div>
+              <div className="post-card-body">
+                <p className="post-location">📍 {post.location}</p>
+                <p className="post-time">🕒 {new Date(post.dateTime).toLocaleString()}</p>
+              </div>
+            </Link>
+
             <div className="post-card-divider"></div>
+
             <div className="post-card-footer">
-              <span></span>
+              <div className="post-creator-row">
+                <span className="post-creator-avatar">
+                  {post.createdBy?.name?.charAt(0).toUpperCase()}
+                </span>
+                <p className="post-creator">Organized by {post.createdBy?.name}</p>
+              </div>
               <button className="btn-outline" onClick={() => handleLeave(post._id)}>Leave</button>
             </div>
           </div>

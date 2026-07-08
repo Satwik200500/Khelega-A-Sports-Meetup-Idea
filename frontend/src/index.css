@@ -549,3 +549,14 @@ input, select {
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(22, 36, 28, 0.1);
 }
+
+.home-logo {
+  height: 48px;
+  width: auto;
+  margin-bottom: 24px;
+}
+
+.navbar-logo-img {
+  height: 32px;
+  width: auto;
+}
