@@ -36,3 +36,43 @@ export const getAllPosts = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+export const joinPost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    if (post.status !== "open") {
+      return res.status(400).json({ message: "This post is no longer open for joining" });
+    }
+
+    const alreadyJoined = post.playersJoined.some(
+      (playerId) => playerId.toString() === req.userId
+    );
+    if (alreadyJoined) {
+      return res.status(400).json({ message: "You have already joined this post" });
+    }
+
+    if (post.playersJoined.length >= post.playersNeeded) {
+      return res.status(400).json({ message: "This post is already full" });
+    }
+
+    post.playersJoined.push(req.userId);
+
+    if (post.playersJoined.length >= post.playersNeeded) {
+      post.status = "full";
+    }
+
+    await post.save();
+
+    res.status(200).json({
+      message: "Joined post successfully",
+      post,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
