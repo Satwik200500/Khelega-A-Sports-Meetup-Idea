@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getAllPosts, joinPost, leavePost } from "../api/posts";
+import { sportIcons } from "../utils/sportIcons";
 
 function Feed() {
   const [posts, setPosts] = useState([]);
@@ -89,7 +90,10 @@ function Feed() {
             <div className="post-card" key={post._id}>
               <Link to={`/posts/${post._id}`} className="post-card-link">
                 <div className="post-card-header">
-                  <span className="post-sport-tag">{post.sport}</span>
+                  <span className="post-sport-tag">
+                    <span className="post-sport-icon">{sportIcons[post.sport]}</span>
+                    {post.sport}
+                  </span>
                   <span className={`post-status post-status-${post.status}`}>{post.status}</span>
                 </div>
 
@@ -99,15 +103,32 @@ function Feed() {
                   <p className="post-equipment">
                     {post.hasEquipment ? "🏸 Equipment provided" : "🎒 Bring your own equipment"}
                   </p>
+
+                  <div className="post-progress">
+                    <div className="post-progress-bar">
+                      <div
+                        className="post-progress-fill"
+                        style={{ width: `${(post.playersJoined.length / post.playersNeeded) * 100}%` }}
+                      ></div>
+                    </div>
+                    <span className="post-progress-label">
+                      {post.playersJoined.length}/{post.playersNeeded} joined
+                    </span>
+                  </div>
                 </div>
               </Link>
 
               <div className="post-card-divider"></div>
 
               <div className="post-card-footer">
-                <div>
-                  <p className="post-spots">{spotsLeft} spot{spotsLeft !== 1 ? "s" : ""} left</p>
-                  <p className="post-creator">by {post.createdBy?.name}</p>
+                <div className="post-creator-row">
+                  <span className="post-creator-avatar">
+                    {post.createdBy?.name?.charAt(0).toUpperCase()}
+                  </span>
+                  <div>
+                    <p className="post-spots">{spotsLeft} spot{spotsLeft !== 1 ? "s" : ""} left</p>
+                    <p className="post-creator">by {post.createdBy?.name}</p>
+                  </div>
                 </div>
 
                 {currentUser && hasJoined && (
