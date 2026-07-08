@@ -76,3 +76,37 @@ export const joinPost = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+export const leavePost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const hasJoined = post.playersJoined.some(
+      (playerId) => playerId.toString() === req.userId
+    );
+    if (!hasJoined) {
+      return res.status(400).json({ message: "You have not joined this post" });
+    }
+
+    post.playersJoined = post.playersJoined.filter(
+      (playerId) => playerId.toString() !== req.userId
+    );
+
+    if (post.status === "full") {
+      post.status = "open";
+    }
+
+    await post.save();
+
+    res.status(200).json({
+      message: "Left post successfully",
+      post,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
