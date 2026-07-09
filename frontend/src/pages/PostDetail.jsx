@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getPostById, joinPost, leavePost, deletePost } from "../api/posts";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { defaultIcon } from "../utils/leafletIconFix";
 
 function PostDetail() {
   const { id } = useParams();
@@ -81,6 +83,25 @@ function PostDetail() {
           <p>{spotsLeft} of {post.playersNeeded} spots left</p>
           <p className="post-creator">Organized by {post.createdBy?.name}</p>
         </div>
+
+        {post.latitude && post.longitude && (
+          <div className="post-map">
+            <MapContainer
+              center={[post.latitude, post.longitude]}
+              zoom={15}
+              scrollWheelZoom={false}
+              style={{ height: "220px", width: "100%" }}
+            >
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              />
+              <Marker position={[post.latitude, post.longitude]} icon={defaultIcon}>
+                <Popup>{post.location}</Popup>
+              </Marker>
+            </MapContainer>
+          </div>
+        )}
 
         <div className="post-card-divider"></div>
 
