@@ -2,7 +2,7 @@ import Post from "../models/Post.js";
 
 export const createPost = async (req, res) => {
   try {
-    const { sport, location, dateTime, playersNeeded, hasEquipment } = req.body;
+    const { sport, location, dateTime, playersNeeded, hasEquipment, latitude, longitude } = req.body;
 
     const newPost = await Post.create({
       sport,
@@ -10,6 +10,8 @@ export const createPost = async (req, res) => {
       dateTime,
       playersNeeded,
       hasEquipment,
+      latitude,
+      longitude,
       createdBy: req.userId,
     });
 
