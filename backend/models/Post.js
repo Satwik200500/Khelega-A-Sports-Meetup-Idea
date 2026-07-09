@@ -53,6 +53,11 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    notes: {
+      type: String,
+      required: false,
+      maxlength: 300,
+   },
   },
   {
     timestamps: true,

@@ -15,6 +15,7 @@ function CreatePost() {
   const [hasEquipment, setHasEquipment] = useState(false);
   const [error, setError] = useState("");
   const [otherSportName, setOtherSportName] = useState("");
+  const [notes, setNotes] = useState("");
 
   const debounceRef = useRef(null);
   const navigate = useNavigate();
@@ -60,6 +61,7 @@ function CreatePost() {
       latitude: coords?.latitude,
       longitude: coords?.longitude,
       otherSportName: sport === "Other" ? otherSportName : undefined,
+      notes,
     });
     navigate("/feed");
   } catch (err) {
@@ -131,6 +133,7 @@ function CreatePost() {
           min="1"
           value={playersNeeded}
           onChange={(e) => setPlayersNeeded(e.target.value)}
+          onWheel={(e) => e.target.blur()}
           required
         />
 
@@ -142,6 +145,15 @@ function CreatePost() {
           />
           I have equipment to bring
         </label>
+
+        <label>Additional Notes <span className="label-optional">(optional)</span></label>
+          <textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder="e.g. Meet at Gate 2, bring an extra racket if you have one"
+            maxLength={300}
+            rows={3}
+          />
 
         <button className="btn-primary" type="submit">Create Post</button>
 

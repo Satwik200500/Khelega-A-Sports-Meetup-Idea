@@ -82,6 +82,7 @@ function PostDetail() {
           <p>{post.hasEquipment ? "🏸 Equipment provided" : "🎒 Bring your own equipment"}</p>
           <p>{spotsLeft} of {post.playersNeeded} spots left</p>
           <p className="post-creator">Organized by {post.createdBy?.name}</p>
+          {post.notes && <p className="post-notes">📝 {post.notes}</p>}
         </div>
 
         {post.latitude && post.longitude && (
