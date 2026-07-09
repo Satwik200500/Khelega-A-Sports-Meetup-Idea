@@ -43,6 +43,8 @@ function CreatePost() {
   e.preventDefault();
   setError("");
 
+  const localDate = new Date(dateTime);
+
   if (new Date(dateTime) < new Date()) {
     setError("Please enter a valid future date and time");
     return;
@@ -52,7 +54,7 @@ function CreatePost() {
     await createPost({
       sport,
       location,
-      dateTime,
+      dateTime: localDate.toISOString(),
       playersNeeded: Number(playersNeeded),
       hasEquipment,
       latitude: coords?.latitude,
