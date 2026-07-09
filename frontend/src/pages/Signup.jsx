@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { signup } from "../api/auth";
 
 function Signup() {
@@ -7,19 +7,18 @@ function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setSuccess("");
 
     try {
       const data = await signup(name, email, password);
-      setSuccess(data.message);
-      setName("");
-      setEmail("");
-      setPassword("");
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      navigate("/feed");
     } catch (err) {
       setError(err.message);
     }
@@ -58,7 +57,6 @@ function Signup() {
         <button className="btn-primary" type="submit">Sign Up</button>
 
         {error && <p className="form-error">{error}</p>}
-        {success && <p className="form-success">{success}</p>}
 
         <p className="auth-switch">
           Already have an account? <Link to="/login">Login</Link>
