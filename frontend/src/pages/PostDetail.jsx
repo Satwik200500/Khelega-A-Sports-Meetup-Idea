@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getPostById, joinPost, leavePost, deletePost } from "../api/posts";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { defaultIcon } from "../utils/leafletIconFix";
+import { calculateDistance } from "../utils/distance";
 
 function PostDetail() {
   const { id } = useParams();
@@ -12,6 +13,7 @@ function PostDetail() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [actionError, setActionError] = useState("");
+  const [userLocation, setUserLocation] = useState(null);
 
   const currentUser = JSON.parse(localStorage.getItem("user"));
 
@@ -29,6 +31,22 @@ function PostDetail() {
   useEffect(() => {
     loadPost();
   }, [id]);
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+        },
+        () => {
+          // silently ignore if denied - just won't show distance
+        }
+      );
+    }
+  }, []);
 
   const handleJoin = async () => {
     setActionError("");
@@ -68,6 +86,11 @@ function PostDetail() {
   const isCreator = currentUser && post.createdBy?._id === currentUser.id;
   const spotsLeft = post.playersNeeded - post.playersJoined.length;
 
+  const distance =
+    userLocation && post.latitude && post.longitude
+      ? calculateDistance(userLocation.latitude, userLocation.longitude, post.latitude, post.longitude)
+      : null;
+
   return (
     <div className="detail-page">
       <div className="detail-card">
@@ -78,6 +101,11 @@ function PostDetail() {
 
         <div className="detail-body">
           <p>📍 {post.location}</p>
+          {distance !== null && (
+            <p className="post-distance">
+              {distance < 1 ? `${Math.round(distance * 1000)} m away` : `${distance.toFixed(1)} km away`}
+            </p>
+          )}
           <p>🕒 {new Date(post.dateTime).toLocaleString()}</p>
           <p>{post.hasEquipment ? "🏸 Equipment provided" : "🎒 Bring your own equipment"}</p>
           <p>{spotsLeft} of {post.playersNeeded} spots left</p>

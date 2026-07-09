@@ -681,3 +681,9 @@ textarea {
   font-size: 0.85rem;
   margin-top: 4px;
 }
+
+.post-distance {
+  color: var(--color-turf);
+  font-weight: 600;
+  font-size: 0.8rem;
+}

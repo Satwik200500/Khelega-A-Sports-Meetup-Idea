@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { getAllPosts, joinPost, leavePost } from "../api/posts";
 import { sportIcons } from "../utils/sportIcons";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { defaultIcon } from "../utils/leafletIconFix";
+import { calculateDistance } from "../utils/distance";
 
 function Feed() {
   const [posts, setPosts] = useState([]);
@@ -11,6 +12,8 @@ function Feed() {
   const [loading, setLoading] = useState(true);
   const [actionError, setActionError] = useState("");
   const [sportFilter, setSportFilter] = useState("All");
+  const [userLocation, setUserLocation] = useState(null);
+  const [locationStatus, setLocationStatus] = useState("idle");
 
   const currentUser = JSON.parse(localStorage.getItem("user"));
 
@@ -25,8 +28,31 @@ function Feed() {
     }
   };
 
+  const requestLocation = () => {
+    if (!navigator.geolocation) {
+      setLocationStatus("unsupported");
+      return;
+    }
+
+    setLocationStatus("loading");
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setUserLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+        setLocationStatus("granted");
+      },
+      () => {
+        setLocationStatus("denied");
+      }
+    );
+  };
+
   useEffect(() => {
     loadPosts();
+    requestLocation();
   }, []);
 
   const handleJoin = async (postId) => {
@@ -49,6 +75,25 @@ function Feed() {
     }
   };
 
+  const sports = ["All", "Football", "Cricket", "Badminton", "Basketball", "Volleyball", "Tennis", "Other"];
+
+  const visiblePosts =
+    sportFilter === "All" ? posts : posts.filter((post) => post.sport === sportFilter);
+
+  const sortedPosts = useMemo(() => {
+    if (!userLocation) return visiblePosts;
+
+    return [...visiblePosts].sort((a, b) => {
+      if (!a.latitude || !a.longitude) return 1;
+      if (!b.latitude || !b.longitude) return -1;
+
+      const distA = calculateDistance(userLocation.latitude, userLocation.longitude, a.latitude, a.longitude);
+      const distB = calculateDistance(userLocation.latitude, userLocation.longitude, b.latitude, b.longitude);
+
+      return distA - distB;
+    });
+  }, [visiblePosts, userLocation]);
+
   if (loading) {
     return (
       <div className="feed-page">
@@ -64,11 +109,6 @@ function Feed() {
     );
   }
   if (error) return <p className="feed-status form-error">{error}</p>;
-
-  const sports = ["All", "Football", "Cricket", "Badminton", "Basketball", "Volleyball", "Tennis", "Other"];
-
-  const visiblePosts =
-    sportFilter === "All" ? posts : posts.filter((post) => post.sport === sportFilter);
 
   return (
     <div className="feed-page">
@@ -88,7 +128,7 @@ function Feed() {
 
       {actionError && <p className="form-error">{actionError}</p>}
 
-      {visiblePosts.length === 0 && (
+      {sortedPosts.length === 0 && (
         <p className="feed-status">
           {posts.length === 0
             ? "No posts yet. Be the first to create one!"
@@ -97,10 +137,15 @@ function Feed() {
       )}
 
       <div className="post-grid">
-        {visiblePosts.map((post) => {
+        {sortedPosts.map((post) => {
           const hasJoined = currentUser && post.playersJoined.includes(currentUser.id);
           const isCreator = currentUser && post.createdBy?._id === currentUser.id;
           const spotsLeft = post.playersNeeded - post.playersJoined.length;
+
+          const distance =
+            userLocation && post.latitude && post.longitude
+              ? calculateDistance(userLocation.latitude, userLocation.longitude, post.latitude, post.longitude)
+              : null;
 
           return (
             <div className="post-card" key={post._id}>
@@ -115,14 +160,20 @@ function Feed() {
 
                 <div className="post-card-body">
                   <p className="post-location">📍 {post.location}</p>
+                  {distance !== null && (
+                    <p className="post-distance">
+                      {distance < 1 ? `${Math.round(distance * 1000)} m away` : `${distance.toFixed(1)} km away`}
+                    </p>
+                  )}
                   <p className="post-time">🕒 {new Date(post.dateTime).toLocaleString()}</p>
                   <p className="post-equipment">
                     {post.hasEquipment ? "🏸 Equipment provided" : "🎒 Bring your own equipment"}
                   </p>
 
                   {post.latitude && post.longitude && (
-                    <div className="post-card-map">
+                    <div className="post-card-map" key={`map-wrapper-${post._id}`}>
                       <MapContainer
+                        key={`map-${post._id}`}
                         center={[post.latitude, post.longitude]}
                         zoom={13}
                         zoomControl={false}
@@ -165,7 +216,7 @@ function Feed() {
                   </div>
                 </div>
 
-                {currentUser && !isCreator && hasJoined &&(
+                {currentUser && !isCreator && hasJoined && (
                   <button className="btn-outline" onClick={() => handleLeave(post._id)}>Leave</button>
                 )}
 
