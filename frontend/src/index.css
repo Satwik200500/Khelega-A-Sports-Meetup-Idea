@@ -707,3 +707,51 @@ textarea {
   cursor: pointer;
   text-decoration: underline;
 }
+
+.terms-page {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 40px 32px;
+}
+
+.terms-page section {
+  margin-bottom: 24px;
+}
+
+.terms-page h3 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.terms-page p {
+  color: var(--color-ink);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.terms-footer {
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  margin-top: 32px;
+  font-style: italic;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 32px;
+  border-top: 1px solid var(--color-border);
+  margin-top: 60px;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.footer a {
+  color: var(--color-muted);
+  text-decoration: none;
+}
+
+.footer a:hover {
+  color: var(--color-turf);
+}

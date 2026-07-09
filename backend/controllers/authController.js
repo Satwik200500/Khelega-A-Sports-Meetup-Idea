@@ -4,7 +4,11 @@ import jwt from "jsonwebtoken";
 
 export const signupUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, agreedToTerms } = req.body;
+
+    if (!agreedToTerms) {
+      return res.status(400).json({ message: "You must agree to the Terms & Conditions to sign up" });
+    }
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {

@@ -6,6 +6,7 @@ function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
@@ -14,8 +15,13 @@ function Signup() {
     e.preventDefault();
     setError("");
 
+    if (!agreedToTerms) {
+      setError("You must confirm you are 18+ and agree to the Terms & Conditions to continue");
+      return;
+    }
+
     try {
-      const data = await signup(name, email, password);
+      const data = await signup(name, email, password, agreedToTerms);
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
       navigate("/feed");
@@ -53,6 +59,16 @@ function Signup() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
+
+        <label className="checkbox-label">
+          <input
+            type="checkbox"
+            checked={agreedToTerms}
+            onChange={(e) => setAgreedToTerms(e.target.checked)}
+          />
+          I confirm I am 18 years or older and agree to the{" "}
+          <Link to="/terms" target="_blank" rel="noopener noreferrer">Terms & Conditions</Link>
+        </label>
 
         <button className="btn-primary" type="submit">Sign Up</button>
 
