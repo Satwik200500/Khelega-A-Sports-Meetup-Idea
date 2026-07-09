@@ -4,6 +4,10 @@ export const createPost = async (req, res) => {
   try {
     const { sport, location, dateTime, playersNeeded, hasEquipment, latitude, longitude } = req.body;
 
+    if (new Date(dateTime) < new Date()) {
+      return res.status(400).json({ message: "Please enter a valid future date and time" });
+    }
+
     const newPost = await Post.create({
       sport,
       location,
@@ -26,7 +30,7 @@ export const createPost = async (req, res) => {
 
 export const getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find()
+    const posts = await Post.find({ dateTime: { $gte: new Date() } })
       .populate("createdBy", "name email")
       .sort({ createdAt: -1 });
 

@@ -38,25 +38,29 @@ function CreatePost() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
+  e.preventDefault();
+  setError("");
 
-    try {
-      await createPost({
-        sport,
-        location,
-        dateTime,
-        playersNeeded: Number(playersNeeded),
-        hasEquipment,
-        latitude: coords?.latitude,
-        longitude: coords?.longitude,
-      });
-      navigate("/feed");
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+  if (new Date(dateTime) < new Date()) {
+    setError("Please enter a valid future date and time");
+    return;
+  }
 
+  try {
+    await createPost({
+      sport,
+      location,
+      dateTime,
+      playersNeeded: Number(playersNeeded),
+      hasEquipment,
+      latitude: coords?.latitude,
+      longitude: coords?.longitude,
+    });
+    navigate("/feed");
+  } catch (err) {
+    setError(err.message);
+  }
+};
   return (
     <div className="auth-page">
       <form className="auth-card" onSubmit={handleSubmit}>
