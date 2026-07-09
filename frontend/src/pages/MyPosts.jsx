@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { getAllPosts, leavePost } from "../api/posts";
 import { Link } from "react-router-dom";
 import { sportIcons } from "../utils/sportIcons";
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import { defaultIcon } from "../utils/leafletIconFix";
 
 function MyPosts() {
   const [posts, setPosts] = useState([]);
@@ -35,19 +37,19 @@ function MyPosts() {
   };
 
   if (loading) {
-  return (
-    <div className="feed-page">
-      <h2>Games Near You</h2>
-      <div className="post-grid">
-        {[1, 2, 3, 4, 5, 6].map((n) => (
-          <div className="skeleton-card" key={n}>
-            <div className="skeleton-shimmer"></div>
-          </div>
-        ))}
+    return (
+      <div className="feed-page">
+        <h2>Games Near You</h2>
+        <div className="post-grid">
+          {[1, 2, 3, 4, 5, 6].map((n) => (
+            <div className="skeleton-card" key={n}>
+              <div className="skeleton-shimmer"></div>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
   if (error) return <p className="feed-status form-error">{error}</p>;
 
   const createdPosts = posts.filter((post) => post.createdBy?._id === currentUser.id);
@@ -83,6 +85,24 @@ function MyPosts() {
                 <div className="post-card-body">
                   <p className="post-location">📍 {post.location}</p>
                   <p className="post-time">🕒 {new Date(post.dateTime).toLocaleString()}</p>
+
+                  {post.latitude && post.longitude && (
+                    <div className="post-card-map">
+                      <MapContainer
+                        center={[post.latitude, post.longitude]}
+                        zoom={13}
+                        zoomControl={false}
+                        dragging={false}
+                        scrollWheelZoom={false}
+                        doubleClickZoom={false}
+                        attributionControl={false}
+                        style={{ height: "100px", width: "100%" }}
+                      >
+                        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                        <Marker position={[post.latitude, post.longitude]} icon={defaultIcon} />
+                      </MapContainer>
+                    </div>
+                  )}
 
                   <div className="post-progress">
                     <div className="post-progress-bar">
@@ -122,6 +142,24 @@ function MyPosts() {
               <div className="post-card-body">
                 <p className="post-location">📍 {post.location}</p>
                 <p className="post-time">🕒 {new Date(post.dateTime).toLocaleString()}</p>
+
+                {post.latitude && post.longitude && (
+                  <div className="post-card-map">
+                    <MapContainer
+                      center={[post.latitude, post.longitude]}
+                      zoom={13}
+                      zoomControl={false}
+                      dragging={false}
+                      scrollWheelZoom={false}
+                      doubleClickZoom={false}
+                      attributionControl={false}
+                      style={{ height: "100px", width: "100%" }}
+                    >
+                      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                      <Marker position={[post.latitude, post.longitude]} icon={defaultIcon} />
+                    </MapContainer>
+                  </div>
+                )}
               </div>
             </Link>
 
