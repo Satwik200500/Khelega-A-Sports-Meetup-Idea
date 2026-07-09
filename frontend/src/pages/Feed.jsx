@@ -99,6 +99,7 @@ function Feed() {
       <div className="post-grid">
         {visiblePosts.map((post) => {
           const hasJoined = currentUser && post.playersJoined.includes(currentUser.id);
+          const isCreator = currentUser && post.createdBy?._id === currentUser.id;
           const spotsLeft = post.playersNeeded - post.playersJoined.length;
 
           return (
@@ -164,11 +165,11 @@ function Feed() {
                   </div>
                 </div>
 
-                {currentUser && hasJoined && (
+                {currentUser && !isCreator && hasJoined &&(
                   <button className="btn-outline" onClick={() => handleLeave(post._id)}>Leave</button>
                 )}
 
-                {currentUser && !hasJoined && post.status === "open" && (
+                {currentUser && !isCreator && !hasJoined && post.status === "open" && (
                   <button className="btn-accent" onClick={() => handleJoin(post._id)}>Join</button>
                 )}
               </div>

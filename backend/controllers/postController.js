@@ -8,6 +8,9 @@ export const createPost = async (req, res) => {
       return res.status(400).json({ message: "Please enter a valid future date and time" });
     }
 
+    const initialPlayers = [req.userId];
+    const initialStatus = initialPlayers.length >= playersNeeded ? "full" : "open";
+
     const newPost = await Post.create({
       sport,
       location,
@@ -18,6 +21,8 @@ export const createPost = async (req, res) => {
       longitude,
       otherSportName: sport === "Other" ? otherSportName : undefined,
       createdBy: req.userId,
+      playersJoined: initialPlayers,
+      status: initialStatus,
     });
 
     res.status(201).json({
