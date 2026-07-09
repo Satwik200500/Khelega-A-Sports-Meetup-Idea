@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getAllPosts, leavePost } from "../api/posts";
+import { getMyPosts, leavePost } from "../api/posts";
 import { Link } from "react-router-dom";
 import { sportIcons } from "../utils/sportIcons";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
@@ -14,7 +14,7 @@ function MyPosts() {
 
   const loadPosts = async () => {
     try {
-      const data = await getAllPosts();
+      const data = await getMyPosts();
       setPosts(data.posts);
     } catch (err) {
       setError(err.message);

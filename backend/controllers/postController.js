@@ -36,7 +36,10 @@ export const createPost = async (req, res) => {
 
 export const getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find({ dateTime: { $gte: new Date() } })
+    const posts = await Post.find({
+      dateTime: { $gte: new Date() },
+      status: "open",
+    })
       .populate("createdBy", "name email")
       .sort({ createdAt: -1 });
 
@@ -154,6 +157,23 @@ export const getPostById = async (req, res) => {
     }
 
     res.status(200).json({ post });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+export const getMyPosts = async (req, res) => {
+  try {
+    const posts = await Post.find({
+      $or: [{ createdBy: req.userId }, { playersJoined: req.userId }],
+    })
+      .populate("createdBy", "name email")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      count: posts.length,
+      posts,
+    });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }

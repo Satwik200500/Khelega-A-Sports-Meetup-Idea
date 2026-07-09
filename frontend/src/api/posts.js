@@ -99,3 +99,21 @@ export const deletePost = async (postId) => {
 
   return data;
 };
+
+export const getMyPosts = async () => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(`${BASE_URL}/my-posts`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to fetch your posts");
+  }
+
+  return data;
+};

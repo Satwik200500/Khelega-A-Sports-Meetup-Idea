@@ -1,11 +1,12 @@
 import express from "express";
-import { createPost, getAllPosts, joinPost, leavePost, deletePost, getPostById } from "../controllers/postController.js";
+import { createPost, getAllPosts, joinPost, leavePost, deletePost, getPostById, getMyPosts } from "../controllers/postController.js";
 import protect from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
 router.post("/", protect, createPost);
 router.get("/", getAllPosts);
+router.get("/my-posts", protect, getMyPosts);
 router.put("/:id/join", protect, joinPost);
 router.put("/:id/leave", protect, leavePost);
 router.get("/:id", getPostById);
