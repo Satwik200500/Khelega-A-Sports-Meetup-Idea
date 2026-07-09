@@ -4,7 +4,7 @@
 
 Khelega is a free platform that connects people who want to play a sport but are short on players or equipment. Post what you need — sport, location, time, and how many players are missing — and nearby players can discover and join. No turf booking, no payments, just player-to-player matchmaking.
 
-**Live app:** [khelega-sports.vercel.app](https://khelega-sports.vercel.app)
+**Live app:** [khelega-a-sports-meetup-idea.vercel.app](https://khelega-a-sports-meetup-idea.vercel.app)
 **API:** [khelega-backend.onrender.com](https://khelega-backend.onrender.com)
 
 > Note: the backend is hosted on a free tier and may take 30–60 seconds to wake up if it hasn't been used recently.
@@ -15,7 +15,7 @@ Khelega is a free platform that connects people who want to play a sport but are
 
 | Home | Feed | Create Post |
 |---|---|---|
-| ![Home page](docs/screenshots/Khelega_Homefeed.png) | ![Feed page](docs/screenshots/Khelega_post.png) | ![Create post form](docs/screenshots/Khelega_createpost.png) |
+| ![Home page](docs/screenshots/Screenshot_2026-07-09_112431.png) | ![Feed page](docs/screenshots/Screenshot_2026-07-09_112456.png) | ![Create post form](docs/screenshots/Screenshot_2026-07-09_112511.png) |
 
 ---
 
@@ -23,6 +23,8 @@ Khelega is a free platform that connects people who want to play a sport but are
 
 - User authentication with JWT and hashed passwords
 - Create posts specifying sport, location, time, players needed, and equipment availability
+- Live address search with real-time geocoding (OpenStreetMap Nominatim) when creating a post
+- Interactive map with a location pin on each post's detail page, plus map preview thumbnails on the feed (built with Leaflet — no paid API or API key required)
 - Browse and filter open games by sport
 - Join or leave a game, with live spot-count updates
 - View full post details, including everyone who's joined
@@ -34,6 +36,7 @@ Khelega is a free platform that connects people who want to play a sport but are
 **Frontend:** React (Vite), React Router, plain CSS
 **Backend:** Node.js, Express, JWT, bcrypt
 **Database:** MongoDB (Atlas), Mongoose
+**Maps & Geocoding:** Leaflet, OpenStreetMap, Nominatim
 **Deployment:** Vercel (frontend), Render (backend)
 
 ## Project Structure
