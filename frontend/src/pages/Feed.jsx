@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getAllPosts, joinPost, leavePost } from "../api/posts";
 import { sportIcons } from "../utils/sportIcons";
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import { defaultIcon } from "../utils/leafletIconFix";
 
 function Feed() {
   const [posts, setPosts] = useState([]);
@@ -48,19 +50,19 @@ function Feed() {
   };
 
   if (loading) {
-  return (
-    <div className="feed-page">
-      <h2>Games Near You</h2>
-      <div className="post-grid">
-        {[1, 2, 3, 4, 5, 6].map((n) => (
-          <div className="skeleton-card" key={n}>
-            <div className="skeleton-shimmer"></div>
-          </div>
-        ))}
+    return (
+      <div className="feed-page">
+        <h2>Games Near You</h2>
+        <div className="post-grid">
+          {[1, 2, 3, 4, 5, 6].map((n) => (
+            <div className="skeleton-card" key={n}>
+              <div className="skeleton-shimmer"></div>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
   if (error) return <p className="feed-status form-error">{error}</p>;
 
   const sports = ["All", "Football", "Cricket", "Badminton", "Basketball", "Volleyball", "Tennis", "Other"];
@@ -100,7 +102,7 @@ function Feed() {
           const spotsLeft = post.playersNeeded - post.playersJoined.length;
 
           return (
-            <div className="post-card" key={post._id} >
+            <div className="post-card" key={post._id}>
               <Link to={`/posts/${post._id}`} className="post-card-link">
                 <div className="post-card-header">
                   <span className="post-sport-tag">
@@ -116,6 +118,24 @@ function Feed() {
                   <p className="post-equipment">
                     {post.hasEquipment ? "🏸 Equipment provided" : "🎒 Bring your own equipment"}
                   </p>
+
+                  {post.latitude && post.longitude && (
+                    <div className="post-card-map">
+                      <MapContainer
+                        center={[post.latitude, post.longitude]}
+                        zoom={13}
+                        zoomControl={false}
+                        dragging={false}
+                        scrollWheelZoom={false}
+                        doubleClickZoom={false}
+                        attributionControl={false}
+                        style={{ height: "100px", width: "100%" }}
+                      >
+                        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                        <Marker position={[post.latitude, post.longitude]} icon={defaultIcon} />
+                      </MapContainer>
+                    </div>
+                  )}
 
                   <div className="post-progress">
                     <div className="post-progress-bar">

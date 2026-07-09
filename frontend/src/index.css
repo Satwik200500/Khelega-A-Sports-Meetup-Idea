@@ -652,3 +652,8 @@ input, select {
   margin: 0 24px 20px;
 }
 
+.post-card-map {
+  border-radius: 6px;
+  overflow: hidden;
+  pointer-events: none;
+}
