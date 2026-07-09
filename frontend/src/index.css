@@ -687,3 +687,23 @@ textarea {
   font-weight: 600;
   font-size: 0.8rem;
 }
+
+.location-banner {
+  margin-bottom: 20px;
+}
+
+.location-status {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: var(--color-turf);
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+}

@@ -1,10 +1,11 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { Link } from "react-router-dom";
 import { getAllPosts, joinPost, leavePost } from "../api/posts";
 import { sportIcons } from "../utils/sportIcons";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { defaultIcon } from "../utils/leafletIconFix";
 import { calculateDistance } from "../utils/distance";
+import { searchLocation } from "../api/geocode";
 
 function Feed() {
   const [posts, setPosts] = useState([]);
@@ -14,6 +15,10 @@ function Feed() {
   const [sportFilter, setSportFilter] = useState("All");
   const [userLocation, setUserLocation] = useState(null);
   const [locationStatus, setLocationStatus] = useState("idle");
+  const [manualQuery, setManualQuery] = useState("");
+  const [manualSuggestions, setManualSuggestions] = useState([]);
+  const [showManualSearch, setShowManualSearch] = useState(false);
+  const manualDebounceRef = useRef(null);
 
   const currentUser = JSON.parse(localStorage.getItem("user"));
 
@@ -75,6 +80,25 @@ function Feed() {
     }
   };
 
+  const handleManualSearch = (value) => {
+    setManualQuery(value);
+
+    if (manualDebounceRef.current) clearTimeout(manualDebounceRef.current);
+
+    manualDebounceRef.current = setTimeout(async () => {
+      const results = await searchLocation(value);
+      setManualSuggestions(results);
+    }, 500);
+  };
+
+  const handleSelectManualLocation = (place) => {
+    setUserLocation({ latitude: place.latitude, longitude: place.longitude });
+    setLocationStatus("granted");
+    setManualQuery(place.displayName);
+    setManualSuggestions([]);
+    setShowManualSearch(false);
+  };
+
   const sports = ["All", "Football", "Cricket", "Badminton", "Basketball", "Volleyball", "Tennis", "Other"];
 
   const visiblePosts =
@@ -124,6 +148,43 @@ function Feed() {
             <option key={sport} value={sport}>{sport}</option>
           ))}
         </select>
+      </div>
+
+      <div className="location-banner">
+        {locationStatus === "granted" && !showManualSearch && (
+          <p className="location-status">
+            📍 Showing nearest games first —{" "}
+            <button className="link-button" onClick={() => setShowManualSearch(true)}>change location</button>
+          </p>
+        )}
+
+        {(locationStatus === "denied" || locationStatus === "unsupported") && !showManualSearch && (
+          <p className="location-status">
+            Location access not available —{" "}
+            <button className="link-button" onClick={() => setShowManualSearch(true)}>search an area instead</button>
+          </p>
+        )}
+
+        {showManualSearch && (
+          <div className="location-input-wrapper">
+            <input
+              type="text"
+              value={manualQuery}
+              onChange={(e) => handleManualSearch(e.target.value)}
+              placeholder="Search for an area..."
+              autoComplete="off"
+            />
+            {manualSuggestions.length > 0 && (
+              <ul className="location-suggestions">
+                {manualSuggestions.map((place, i) => (
+                  <li key={i} onClick={() => handleSelectManualLocation(place)}>
+                    {place.displayName}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
       </div>
 
       {actionError && <p className="form-error">{actionError}</p>}
