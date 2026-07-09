@@ -72,7 +72,7 @@ function PostDetail() {
     <div className="detail-page">
       <div className="detail-card">
         <div className="post-card-header">
-          <span className="post-sport-tag">{post.sport}</span>
+          <span className="post-sport-tag">{post.sport === "Other" && post.otherSportName ? post.otherSportName : post.sport}</span>
           <span className={`post-status post-status-${post.status}`}>{post.status}</span>
         </div>
 

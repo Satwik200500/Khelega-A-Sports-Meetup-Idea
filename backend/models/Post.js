@@ -49,6 +49,10 @@ const postSchema = new mongoose.Schema(
       enum: ["open", "full", "completed", "cancelled"],
       default: "open",
     },
+    otherSportName: {
+      type: String,
+      required: false,
+    },
   },
   {
     timestamps: true,

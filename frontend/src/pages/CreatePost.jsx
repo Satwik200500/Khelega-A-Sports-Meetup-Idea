@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { createPost } from "../api/posts";
 import { searchLocation } from "../api/geocode";
 
+
 function CreatePost() {
   const [sport, setSport] = useState("Football");
   const [location, setLocation] = useState("");
@@ -13,6 +14,7 @@ function CreatePost() {
   const [playersNeeded, setPlayersNeeded] = useState(1);
   const [hasEquipment, setHasEquipment] = useState(false);
   const [error, setError] = useState("");
+  const [otherSportName, setOtherSportName] = useState("");
 
   const debounceRef = useRef(null);
   const navigate = useNavigate();
@@ -55,6 +57,7 @@ function CreatePost() {
       hasEquipment,
       latitude: coords?.latitude,
       longitude: coords?.longitude,
+      otherSportName: sport === "Other" ? otherSportName : undefined,
     });
     navigate("/feed");
   } catch (err) {
@@ -68,16 +71,28 @@ function CreatePost() {
         <p className="auth-subtitle">Tell players what you need.</p>
 
         <label>Sport</label>
-        <select value={sport} onChange={(e) => setSport(e.target.value)}>
-          <option value="Football">Football</option>
-          <option value="Cricket">Cricket</option>
-          <option value="Badminton">Badminton</option>
-          <option value="Basketball">Basketball</option>
-          <option value="Volleyball">Volleyball</option>
-          <option value="Tennis">Tennis</option>
-          <option value="Other">Other</option>
-        </select>
+  <select value={sport} onChange={(e) => setSport(e.target.value)}>
+     <option value="Football">Football</option>
+     <option value="Cricket">Cricket</option>
+     <option value="Badminton">Badminton</option>
+     <option value="Basketball">Basketball</option>
+     <option value="Volleyball">Volleyball</option>
+     <option value="Tennis">Tennis</option>
+     <option value="Other">Other</option>
+  </select>
 
+  {sport === "Other" && (
+   <>
+     <label>What sport?</label>
+     <input
+      type="text"
+      value={otherSportName}
+      onChange={(e) => setOtherSportName(e.target.value)}
+      placeholder="e.g. Kabaddi, Table Tennis"
+      required
+     />
+   </>
+  )}
         <label>Location</label>
         <div className="location-input-wrapper">
           <input

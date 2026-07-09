@@ -107,7 +107,7 @@ function Feed() {
                 <div className="post-card-header">
                   <span className="post-sport-tag">
                     <span className="post-sport-icon">{sportIcons[post.sport]}</span>
-                    {post.sport}
+                    {post.sport === "Other" && post.otherSportName ? post.otherSportName : post.sport}
                   </span>
                   <span className={`post-status post-status-${post.status}`}>{post.status}</span>
                 </div>

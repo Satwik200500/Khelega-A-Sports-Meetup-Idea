@@ -2,7 +2,7 @@ import Post from "../models/Post.js";
 
 export const createPost = async (req, res) => {
   try {
-    const { sport, location, dateTime, playersNeeded, hasEquipment, latitude, longitude } = req.body;
+    const { sport, location, dateTime, playersNeeded, hasEquipment, latitude, longitude, otherSportName } = req.body;
 
     if (new Date(dateTime) < new Date()) {
       return res.status(400).json({ message: "Please enter a valid future date and time" });
@@ -16,6 +16,7 @@ export const createPost = async (req, res) => {
       hasEquipment,
       latitude,
       longitude,
+      otherSportName: sport === "Other" ? otherSportName : undefined,
       createdBy: req.userId,
     });
 
