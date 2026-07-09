@@ -15,7 +15,7 @@ Khelega is a free platform that connects people who want to play a sport but are
 
 | Home | Feed | Create Post |
 |---|---|---|
-| ![Home page](docs/screenshots/Screenshot_2026-07-09_112431.png) | ![Feed page](docs/screenshots/Screenshot_2026-07-09_112456.png) | ![Create post form](docs/screenshots/Screenshot_2026-07-09_112511.png) |
+| ![Home page](docs/screenshots/Khelega_Homefeed.png) | ![Feed page](docs/screenshots/Khelega_post.png) | ![Create post form](docs/screenshots/Khelega_createpost.png) |
 
 ---
 
