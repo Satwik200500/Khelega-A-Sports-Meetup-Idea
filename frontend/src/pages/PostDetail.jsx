@@ -129,6 +129,14 @@ function PostDetail() {
                 <Popup>{post.location}</Popup>
               </Marker>
             </MapContainer>
+            <a
+              href={`https://www.google.com/maps?q=${post.latitude},${post.longitude}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="gmaps-link"
+            >
+              Open in Google Maps ↗
+            </a>
           </div>
         )}
 

@@ -755,3 +755,18 @@ textarea {
 .footer a:hover {
   color: var(--color-turf);
 }
+
+.gmaps-link {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-turf);
+  text-decoration: none;
+  background-color: var(--color-bg);
+}
+
+.gmaps-link:hover {
+  text-decoration: underline;
+}
