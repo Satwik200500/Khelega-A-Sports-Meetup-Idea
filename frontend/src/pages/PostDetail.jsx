@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getPostById, joinPost, leavePost, deletePost } from "../api/posts";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { defaultIcon } from "../utils/leafletIconFix";
 import { calculateDistance } from "../utils/distance";
+import socket from "../socket";
 
 function PostDetail() {
   const { id } = useParams();
@@ -14,6 +15,9 @@ function PostDetail() {
   const [loading, setLoading] = useState(true);
   const [actionError, setActionError] = useState("");
   const [userLocation, setUserLocation] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
+  const messagesEndRef = useRef(null);
 
   const currentUser = JSON.parse(localStorage.getItem("user"));
 
@@ -25,6 +29,21 @@ function PostDetail() {
       setError(err.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadMessages = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/messages/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setMessages(data.messages);
+      }
+    } catch (err) {
+      console.error("Failed to load messages", err);
     }
   };
 
@@ -47,6 +66,42 @@ function PostDetail() {
       );
     }
   }, []);
+
+  useEffect(() => {
+    loadMessages();
+
+    socket.connect();
+    socket.emit("joinPostRoom", { postId: id });
+
+    socket.on("newMessage", (message) => {
+      if (message.post === id) {
+        setMessages((prev) => [...prev, message]);
+      }
+    });
+
+    return () => {
+      socket.emit("leavePostRoom", { postId: id });
+      socket.off("newMessage");
+      socket.disconnect();
+    };
+  }, [id]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    if (!newMessage.trim()) return;
+
+    socket.emit("sendMessage", {
+      postId: id,
+      userId: currentUser.id,
+      text: newMessage,
+    });
+
+    setNewMessage("");
+  };
 
   const handleJoin = async () => {
     setActionError("");
@@ -129,8 +184,8 @@ function PostDetail() {
                 <Popup>{post.location}</Popup>
               </Marker>
             </MapContainer>
-            <a
-              href={`https://www.google.com/maps?q=${post.latitude},${post.longitude}`}
+            
+            <a  href={`https://www.google.com/maps?q=${post.latitude},${post.longitude}`}
               target="_blank"
               rel="noopener noreferrer"
               className="gmaps-link"
@@ -165,6 +220,37 @@ function PostDetail() {
             <button className="btn-outline" onClick={handleDelete}>Delete Post</button>
           )}
         </div>
+
+        {(isCreator || hasJoined) && (
+          <div className="chat-section">
+            <h3 className="my-posts-subheading">Chat</h3>
+
+            <div className="chat-messages">
+              {messages.length === 0 && <p className="post-creator">No messages yet. Say hello!</p>}
+              {messages.map((msg) => (
+                <div
+                  key={msg._id}
+                  className={`chat-message ${msg.sender._id === currentUser.id ? "chat-message-own" : ""}`}
+                >
+                  <span className="chat-message-sender">{msg.sender.name}</span>
+                  <p className="chat-message-text">{msg.text}</p>
+                </div>
+              ))}
+              <div ref={messagesEndRef}></div>
+            </div>
+
+            <form className="chat-input-row" onSubmit={handleSendMessage}>
+              <input
+                type="text"
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                placeholder="Type a message..."
+                maxLength={500}
+              />
+              <button type="submit" className="btn-accent">Send</button>
+            </form>
+          </div>
+        )}
       </div>
     </div>
   );
