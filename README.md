@@ -29,7 +29,7 @@ Khelega is a free platform that connects people who want to play a sport but are
 - Join or leave a game, with live spot-count updates
 - View full post details, including everyone who's joined
 - "My Posts" view for games you've created or joined
-- Only a post's creator can delete it; only logged-in users can create or join posts
+- Only a post's creator can delete it; only logged-in users can create or join post.
 
 ## Tech Stack
 
@@ -106,4 +106,3 @@ The app will be running at `http://localhost:5173`.
 ## License
 
 This project is for educational and portfolio purposes.
- 
